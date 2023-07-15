@@ -52,9 +52,9 @@ def create_node_connection(current_node: GraphNode) -> GraphNode:
     """
     creates new nodes to link 
     """
-    print('P - Create a New Child')
-    print('C - Create a New Parent')
-    user_choice : str = ' '
+    print('P - Create a new parent Node')
+    print('C - Create a new child Node')
+    user_choice: str = ' '
     while True:
         user_choice = input('')
         user_choice = user_choice.upper()
@@ -65,13 +65,13 @@ def create_node_connection(current_node: GraphNode) -> GraphNode:
         elif user_choice == 'Q':
             return current_node
         elif user_choice == 'H':
-            print('P - Create a new child Node')
-            print('C - Create a new parent Node')
+            print('P - Create a new parent Node')
+            print('C - Create a new child Node')
             print('Q - Return to main menu')
             print('H - display options')
         else:
             print('NOT A VALID CHOICE')
-    return current_node
+    return current_node  # ! remove, unreachable code
 
 
 if __name__ == '__main__':
