@@ -52,16 +52,13 @@ def create_node_connection(current_node: GraphNode) -> GraphNode:
     """
     creates new nodes to link 
     """
-    print('P - Create a new parent Node')
-    print('C - Create a new child Node')
-    user_choice: str = ' '
     while True:
-        user_choice = input('')
-        user_choice = user_choice.upper()
+        user_choice: str = input(
+            'P - Create a new parent Node\nC - Create a new child Node').strip().upper()
         if user_choice == 'P':
-            pass
+            pass  # todo add a function that allows to user to input a list of Nodes
         elif user_choice == 'C':
-            pass
+            pass  # todo add a function that allows to user to input a list of Nodes
         elif user_choice == 'Q':
             return current_node
         elif user_choice == 'H':
@@ -71,7 +68,6 @@ def create_node_connection(current_node: GraphNode) -> GraphNode:
             print('H - display options')
         else:
             print('NOT A VALID CHOICE')
-    return current_node  # ! remove, unreachable code
 
 
 if __name__ == '__main__':
@@ -79,21 +75,45 @@ if __name__ == '__main__':
     print('L - List all the Nodes connected to a chosen Node in the Graph')
     print('H - Reprint this message')
     print('Q - Quit the Program')
+    first_node_created: bool = False
+    stored_graphs: list = []  # lists of all the graphs the user creates during runtime
     while True:
-        user_input: str = input('')
-        user_input = user_input.upper()
+        user_input: str = input('').strip().upper()
         if user_input == 'H':
             print('A - Add a New Node to your Graph')
             print('L - List all the Nodes connected to a chosen Node in the Graph')
             print('H - Reprint this message')
             print('Q - Quit the Program')
 
-        elif user_input == 'L':
-            pass
-        elif user_input == 'A':
-            pass
+        elif user_input == 'L' and len(stored_graphs) != 0:
+            for node in stored_graphs:
+                print(node.node_name, '-', len(node.connected_nodes_parent),
+                      '-', len(node.connected_nodes_child))
+        elif user_input == 'L' and len(stored_graphs) == 0:
+            print('ERROR - NO GRAPHS CREATED')
+        elif user_input == 'A' and not first_node_created:
+            # ? have the user create a graph with one Node in it
+            stored_graphs.append(
+                GraphNode(input('What is the name of the graph you are creating: ')
+                          .strip().upper()))
+            print('CREATED NEW GRAPH: ', end=stored_graphs[len(
+                stored_graphs)-1].node_name+'\n')
+        elif user_input == 'A' and first_node_created:
+            # ? prompt user if new graph is needed
+            user_input = input(
+                'Do you want to create another Graph (Y/N): ').strip().upper()
+            if user_input == 'Y':
+                stored_graphs.append(GraphNode(
+                    input('What is the name of the graph you are creating: ').strip().upper()))
+            elif user_input == 'N':
+                # ? prompt user to add a new node,expand graph
+                pass
+                # todo finsh creating function to expand selected graph
+            else:
+                print('ERROR - INPUT NOT VALID - MUST BE Y/N')
+            # todo finish adding input flows
         elif user_input == 'Q':
             break
         else:
-            print('ERROR - NOT A VALID OPTION')
+            print('ERROR - NOT A VALID OPTION - A,L,H,Q')
     print('terminating program')
