@@ -48,16 +48,6 @@ class GraphNode:
         self.connected_nodes_parent.append(child_node)
 
 
-def display_options():
-    """
-    display the optiosn of the program
-    """
-    print('A - Add a New Node to your Graph')
-    print('L - List all the Nodes connected to a chosen Node in the Graph')
-    print('H - Reprint this message')
-    print('Q - Quit the Program')
-
-
 def create_function(current_node: GraphNode) -> GraphNode:
     """
     creates new nodes to link 
@@ -66,11 +56,19 @@ def create_function(current_node: GraphNode) -> GraphNode:
 
 
 if __name__ == '__main__':
-    display_options()
+    print('A - Add a New Node to your Graph')
+    print('L - List all the Nodes connected to a chosen Node in the Graph')
+    print('H - Reprint this message')
+    print('Q - Quit the Program')
     while True:
         user_input: str = input('')
+        user_input = user_input.upper()
         if user_input == 'H':
-            display_options()
+            print('A - Add a New Node to your Graph')
+            print('L - List all the Nodes connected to a chosen Node in the Graph')
+            print('H - Reprint this message')
+            print('Q - Quit the Program')
+
         elif user_input == 'L':
             pass
         elif user_input == 'A':
