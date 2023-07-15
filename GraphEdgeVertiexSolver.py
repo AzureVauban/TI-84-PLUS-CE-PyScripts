@@ -25,6 +25,7 @@ class GraphNode:
     node_name: str = 'A1'
     adajacent_edge_count: int = 0
     adjacent_verticies_count: int = 0
+    adjacency_matrix: list = []
     # stores other instances GraphNode
     connected_nodes_child: list = []
     connected_nodes_parent: list = []
