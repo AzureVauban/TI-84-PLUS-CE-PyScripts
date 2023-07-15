@@ -48,10 +48,29 @@ class GraphNode:
         self.connected_nodes_parent.append(child_node)
 
 
-def create_function(current_node: GraphNode) -> GraphNode:
+def create_node_connection(current_node: GraphNode) -> GraphNode:
     """
     creates new nodes to link 
     """
+    print('P - Create a New Child')
+    print('C - Create a New Parent')
+    user_choice : str = ' '
+    while True:
+        user_choice = input('')
+        user_choice = user_choice.upper()
+        if user_choice == 'P':
+            pass
+        elif user_choice == 'C':
+            pass
+        elif user_choice == 'Q':
+            return current_node
+        elif user_choice == 'H':
+            print('P - Create a new child Node')
+            print('C - Create a new parent Node')
+            print('Q - Return to main menu')
+            print('H - display options')
+        else:
+            print('NOT A VALID CHOICE')
     return current_node
 
 
