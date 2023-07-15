@@ -3,8 +3,6 @@ script to test how python code executes on the TI-84
 - need non-standard lib square root & power function
 """
 
-#!import math
-
 
 def sqroot(value: float) -> float:
     """
@@ -61,5 +59,12 @@ def fib(nth_term: int) -> int:
 
 
 # main script
-limit = input('TEST PROMPT: ')
-print(int(limit), ':', fib(int(limit)))
+print('PRESS 2ND + MODE/QUIT TO STOP RUNNING PROCESS')
+print('NTH : TERM')
+while True:
+    limit = int(input('NTH TERM DESIRED: '))
+    # accept input as a string
+    # parse string for invalid characters
+    # convert validated string into an integer if valid
+    # prompt user to retype if invalid
+    print(limit, ':', fib(limit))
