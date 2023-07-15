@@ -118,45 +118,45 @@ def help_prompt():
     print('Q - Quit the Program')
 
 
-if __name__ == '__main__':
-    help_prompt()
-    first_node_created: bool = False
-    stored_graphs: list = []  # lists of all the graphs the user creates during runtime
-    while True:
-        user_input: str = input('').strip().upper()
-        if user_input == 'H':
-            help_prompt()
-        elif user_input == 'L' and len(stored_graphs) != 0:
-            for node in stored_graphs:
-                print(node.node_name, '-', len(node.connected_nodes_parent),
-                      '-', len(node.connected_nodes_child))
-        elif user_input == 'L' and len(stored_graphs) == 0:
-            print('ERROR - NO GRAPHS CREATED')
-        elif user_input == 'A' and not first_node_created:
-            # ? have the user create a graph with one Node in it
-            stored_graphs.append(
-                GraphNode(input('What is the name of the graph you are creating: ')
-                          .strip().upper()))
-            print('CREATED NEW GRAPH: ', end=stored_graphs[len(
-                stored_graphs)-1].node_name+'\n')
-        elif user_input == 'A' and first_node_created:
-            # ? prompt user if new graph is needed
-            user_input = input(
-                'Do you want to create another Graph (Y/N): ').strip().upper()
-            if user_input == 'Y':
-                stored_graphs.append(GraphNode(
-                    input('What is the name of the graph you are creating: ').strip().upper()))
-            elif user_input == 'N':
-                # ? prompt user to add a new node,expand graph
-                pass
-                # todo finsh creating function to expand selected graph
-            else:
-                print('ERROR - INPUT NOT VALID - MUST BE Y/N')
-            # todo finish adding input flows
-        elif user_input == 'D':
-            removal_nodegraph(stored_graphs)
-        elif user_input == 'Q':
-            break
+# main script
+help_prompt()
+first_node_created: bool = False
+stored_graphs: list = []  # lists of all the graphs the user creates during runtime
+while True:
+    user_input: str = input('').strip().upper()
+    if user_input == 'H':
+        help_prompt()
+    elif user_input == 'L' and len(stored_graphs) != 0:
+        for node in stored_graphs:
+            print(node.node_name, '-', len(node.connected_nodes_parent),
+                  '-', len(node.connected_nodes_child))
+    elif user_input == 'L' and len(stored_graphs) == 0:
+        print('ERROR - NO GRAPHS CREATED')
+    elif user_input == 'A' and not first_node_created:
+        # ? have the user create a graph with one Node in it
+        stored_graphs.append(
+            GraphNode(input('What is the name of the graph you are creating: ')
+                      .strip().upper()))
+        print('CREATED NEW GRAPH: ', end=stored_graphs[len(
+            stored_graphs)-1].node_name+'\n')
+    elif user_input == 'A' and first_node_created:
+        # ? prompt user if new graph is needed
+        user_input = input(
+            'Do you want to create another Graph (Y/N): ').strip().upper()
+        if user_input == 'Y':
+            stored_graphs.append(GraphNode(
+                input('What is the name of the graph you are creating: ').strip().upper()))
+        elif user_input == 'N':
+            # ? prompt user to add a new node,expand graph
+            pass
+            # todo finsh creating function to expand selected graph
         else:
-            print('ERROR - NOT A VALID OPTION - A,L,H,Q')
-    print('terminating program')
+            print('ERROR - INPUT NOT VALID - MUST BE Y/N')
+        # todo finish adding input flows
+    elif user_input == 'D':
+        removal_nodegraph(stored_graphs)
+    elif user_input == 'Q':
+        break
+    else:
+        print('ERROR - NOT A VALID OPTION - A,L,H,Q')
+print('terminating program')
