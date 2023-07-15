@@ -58,13 +58,30 @@ def fib(nth_term: int) -> int:
     return int((m_flt - n_flt) / (sqroot(5)))
 
 
-# main script
-print('PRESS 2ND + MODE/QUIT TO STOP RUNNING PROCESS')
-print('NTH : TERM')
-while True:
-    limit = int(input('NTH TERM DESIRED: '))
+def isinputvalid(userinput: str) -> bool:
+    """
+    validate user input by making sure it only has integers in its input
     # accept input as a string
     # parse string for invalid characters
     # convert validated string into an integer if valid
     # prompt user to retype if invalid
+    """
+    for character in userinput:
+        if not character in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+            return False
+    return True
+
+
+# main script
+print('PRESS 2ND + MODE/QUIT TO STOP\nTWICE RUNNING PROCESS')
+print('NTH : TERM')
+while True:
+    while True:
+        limit = input('NTH TERM DESIRED: ').strip()
+        if not isinputvalid(limit):
+            print('ERROR - ONLY TYPE NUMBERS IN INPUT')
+        else:
+            limit = int(limit)
+            break
     print(limit, ':', fib(limit))
+# end of main script
