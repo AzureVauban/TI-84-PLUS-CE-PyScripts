@@ -1,4 +1,5 @@
 """
+https://education.ti.com/html/eguides/graphing/84PlusCEPy/EN/content/eg_pythonappprog/m_pyentry/m_addon.HTML#ti_image
 DOCSTING:
 
 The purpose of this program is the caculate how much edges or vertices a point has in a graph
