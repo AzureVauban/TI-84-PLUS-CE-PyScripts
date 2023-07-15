@@ -2,6 +2,7 @@
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 script to test how python code 
 executes on the TI-84
+BINETFIB v1.3
 """
 
 
