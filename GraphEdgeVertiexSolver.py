@@ -51,7 +51,7 @@ class GraphNode:
 
 def create_node_connection(current_node: GraphNode) -> GraphNode:
     """
-    creates new nodes to link 
+    creates new nodes to link
     """
     while True:
         user_choice: str = input(
@@ -71,21 +71,60 @@ def create_node_connection(current_node: GraphNode) -> GraphNode:
             print('NOT A VALID CHOICE')
 
 
-if __name__ == '__main__':
-    print('A - Add a New Node to your Graph')
+def removal_nodegraph(mygraphs: list) -> GraphNode:
+    """
+    prompts the user to delete and remove a selected Node from the graph
+    """
+    if len(mygraphs) != 0:
+        for graph in mygraphs:
+            if not isinstance(graph, GraphNode):
+                raise TypeError(
+                    'passed list MUST only stored instances of', GraphNode)
+        # output choices
+        if user_input == 'D' and len(stored_graphs) != 0:
+            # todo make a function that prompts the user to selected and remove a graph
+            i: int = 1
+            for graph in mygraphs:
+                print(i, graph.node_name)
+                i += 1
+            del i
+        # prompt user choose a graph
+        while True:
+            # todo, input as a string, convert to an integer
+            myinput: int = input(
+                'Which graph do you want to remove, press 0 to not remove any graphs').strip().upper()
+            if myinput < 0 and myinput > len(mygraphs):
+                print(
+                    'ERROR - INVALID CHOICE, CHOSEN INTEGER MUST BE BETWEEN 0 AND', len(mygraphs))
+            elif myinput == 0:
+                return None
+            else:
+                # todo add functionality for removing selected graph
+                remove_this_graph = mygraphs[myinput]
+                return remove_this_graph
+    print("WARNING - NO GRAPHS HAVE BEEN CREATED")
+    # ? this should only return if 'mygraphs'is empty, treat as typeless when empty
+    return None
+
+
+def help_prompt():
+    """output instructions and user choices
+    """
+    print('A - Expand graph by adding new nodes')
+    print('D - Remove a node from the graph')
     print('L - List all the Nodes connected to a chosen Node in the Graph')
     print('H - Reprint this message')
     print('Q - Quit the Program')
+
+
+if __name__ == '__main__':
+    help_prompt()
     first_node_created: bool = False
     stored_graphs: list = []  # lists of all the graphs the user creates during runtime
     while True:
         user_input: str = input('').strip().upper()
         if user_input == 'H':
-            print('A - Add a New Node to your Graph')
-            print('L - List all the Nodes connected to a chosen Node in the Graph')
-            print('H - Reprint this message')
-            print('Q - Quit the Program')
-
+            help_prompt()
         elif user_input == 'L' and len(stored_graphs) != 0:
             for node in stored_graphs:
                 print(node.node_name, '-', len(node.connected_nodes_parent),
@@ -113,6 +152,8 @@ if __name__ == '__main__':
             else:
                 print('ERROR - INPUT NOT VALID - MUST BE Y/N')
             # todo finish adding input flows
+        elif user_input == 'D':
+            removal_nodegraph(stored_graphs)
         elif user_input == 'Q':
             break
         else:
