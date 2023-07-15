@@ -25,23 +25,27 @@ class GraphNode:
     adajacent_edge_count: int = 0
     adjacent_verticies_count: int = 0
     # stores other instances GraphNode
-    connectedNodes_child: list = []
-    connectedNodes_parent: list = []
+    connected_nodes_child: list = []
+    connected_nodes_parent: list = []
 
     def __init__(self, node_name: str = 'AA1') -> None:
         self.node_name = node_name
         self.adajacent_edge_count: int = 0
         self.adjacent_verticies_count: int = 0
-        self.connectedNodes_child: list = []
-        self.connectedNodes_parent: list = []
+        self.connected_nodes_child: list = []
+        self.connected_nodes_parent: list = []
 
-    def add_child_node(self, ParentNode=None):
-        # todo add code to check if the ParetNode is an instance of GraphNode
-        pass
+    def add_child_node(self, parent_node=None):
+        """
+        create a Node edge on the current Graph
+        """
+        self.connected_nodes_child.append(parent_node)
 
-    def add_parent_node(self, ChildNode=None):
-        # todo add code to check if the ChildNode is an instance of GraphNode
-        pass
+    def add_parent_node(self, child_node=None):
+        """
+        create a Node edge on the current Graph
+        """
+        self.connected_nodes_parent.append(child_node)
 
 
 def display_options():
