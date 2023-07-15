@@ -1,0 +1,22 @@
+"""
+Graph edge * verticies solver
+"""
+
+
+class GraphNode:
+    """
+    graph Node, connects like a web
+    """
+    node_name: str = 'A1'
+    adjacency_matrix: list = []
+    # stores other instances GraphNode
+    connected_nodes_child: list = []
+    connected_nodes_parent: list = []
+
+    def __init__(self, node_name: str) -> None:
+        self.node_name = node_name
+
+
+# main script
+print('PRESS 2ND + MODE/QUIT TO STOP\nTWICE RUNNING PROCESS')
+# end main script
