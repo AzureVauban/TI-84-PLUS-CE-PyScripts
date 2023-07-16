@@ -94,7 +94,7 @@ class MyGraph:
     wrapper class for graph nodes
     """
     head_node = GraphNode('A0')
-    graph_population: int = 0
+    graph_population = 0
 
     def __init__(self, graph_label: str) -> None:
         self.head_node = GraphNode(graph_label)
@@ -169,6 +169,7 @@ def expand_graph(graphs: list):
             break
     while True:
         # create mini menu for the user to chose a node
+        print('')
         break
 
 
@@ -186,10 +187,7 @@ def add_expand_graphs(graphs: list) -> list:  # todo finish this method
         print()
         if user_input_expansion == 'N':
             # prompt user for which graph they want to expand
-            #! remove this later
-            msg = 'prompt user for which graph they want to expand\n* NOT IMPLEMENTED\n'
-            msg = msg.upper()
-            print(msg)
+            graphs = expand_graph(graphs)
         elif user_input_expansion == 'G':
             while True:
                 name_blacklist = []
