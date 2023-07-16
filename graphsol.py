@@ -104,6 +104,60 @@ class MyGraph:
         """
 
 
+def help_prompt():
+    """output instructions and user choices
+    """
+    print('A - Create graphs & add nodes')
+    print('D - Remove a node from graph')
+    print('L - List nodes within a graph')
+    print('H - Diplay cmd options')
+    print('Q - Quit program\n')
+
+
+def add_expand_graphs(graphs: list) -> list:  # todo finish this method
+    """
+    create a new graph or add nodes to an existing graph
+    N - Create a new node on an existing graph
+    G - Create a new graph
+    Q - Return to Menu
+
+    """
+    while True:
+        print('N - Create a new node on an existing graph\nG - Create a new graph\nH- Display options\nQ - Return to Menu\n')
+        user_input_expansion = input('SELECT MODE: ').strip().upper()
+        if user_input_expansion == 'N':
+            pass
+        elif user_input_expansion == 'G':
+            pass
+        elif user_input_expansion == 'H':
+            print('N - Create a new node on an existing graph\nG - Create a new graph\nH- Display options\nQ - Return to Menu\n')
+        elif user_input_expansion == 'Q':
+            help_prompt()
+            return graphs
+        else:
+            print('ERROR - NOT VALID OPTION, VALID\nOPTIONS ARE N,G,H,Q')
+
+
 # main script
-print('PRESS 2ND + MODE/QUIT TO STOP\nTWICE RUNNING PROCESS')
+print('PRESS 2ND + MODE/QUIT TO STOP\nTWICE RUNNING PROCESS\n')
+help_prompt()
+while True:
+    # main menu options
+    listofusergraphs = []
+    USER_INPUT = input('SELECT MODE: ').strip().upper()
+    if USER_INPUT not in ['A', 'D', 'L', 'H', 'Q']:
+        print('ERROR, NOT VALID OPTION, VALID\nOPTIONS ARE A,D,L,H,Q\n')
+    elif USER_INPUT == 'A':
+        #! print('ADD NODE TO GRAPH OR START A\nNEW GRAPH\n')
+        add_expand_graphs(listofusergraphs)
+    elif USER_INPUT == 'D':
+        print('REMOVE DESIRED NODES\n* NOT IMPLEMENTED\n')
+    elif USER_INPUT == 'L':
+        print('LIST ALL NODES\n* NOT IMPLEMENTED\n')
+    elif USER_INPUT == 'H':
+        help_prompt()
+    elif USER_INPUT == 'Q':
+        break
+    else:
+        raise RuntimeError('INVALID MENU CHOICE\n')
 # end main script
