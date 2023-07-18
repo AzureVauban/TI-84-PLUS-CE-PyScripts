@@ -3,6 +3,13 @@ Graph edge & verticies solver
 What is an edge?:
 what is a vertex?:
 What is a graph?:
+
+
+adajency matrix
+[   [0,0,0],
+    [0,1,0],
+    [1,1,0]
+]
 """
 
 
@@ -69,10 +76,26 @@ class GraphNode:
         """
         if not isinstance(child_node, GraphNode):
             raise TypeError('Node must be an instance of', GraphNode)
-        self.connected_nodes_child.append(child_node)
-        child_node.connected_nodes_parent.append(self)
-
-    def validate_connection_exists(self, node_check) -> bool:
+        if not self.__validate_connection_exists(child_node):
+            self.connected_nodes_child.append(child_node)
+            child_node.connected_nodes_parent.append(self)
+            #! update adajency graph
+        else:
+            print('UNABLE CONNECT CHILD NODE',child_node.node_label,'\nTO PARENT NODE',self.node_label)
+    def link_parent_node(self,parent_node):
+        """
+        create a new doubly linked connection between this node as the parent
+        and another node was a child
+        """
+        if not isinstance(parent_node, GraphNode):
+            raise TypeError('Node must be an instance of', GraphNode)
+        if not self.__validate_connection_exists(parent_node):
+            self.connected_nodes_child.append(parent_node)
+            parent_node.connected_nodes_parent.append(self)
+            #! update adajency graph
+        else:
+            print('UNABLE CONNECT PARENT NODE',parent_node.node_label,'\nTO CHILD NODE',self.node_label)
+    def __validate_connection_exists(self, node_check) -> bool:
         """
         checks to see if a connection between this node and another node exists already;
         returns true if connection exists and false if doesn't
@@ -80,24 +103,31 @@ class GraphNode:
 
         if not isinstance(node_check, GraphNode):
             raise TypeError('Node must be an instance of', GraphNode)
+        for node in self.connected_nodes_child:
+            if not isinstance(node,GraphNode):
+                raise TypeError('child node must an instance of',GraphNode)
+        for node in self.connected_nodes_parent:
+            if not isinstance(node,GraphNode):
+                raise TypeError('parent node must an instance of',GraphNode)
+        if node in self.connected_nodes_child or node in self.connected_nodes_parent:
+            return True
         return False
 
-    def link_parent_node(self, parent_node):
-        """
-        create a new doubly linked connection between this node as the child
-        and another node was a parent
-        """
+    
 
 
 class MyGraph:
     """
     wrapper class for graph nodes
     """
+    graph_label = 'A'
     head_node = GraphNode('A0')
     graph_population = 0
 
     def __init__(self, graph_label: str) -> None:
-        self.head_node = GraphNode(graph_label)
+        self.graph_label = graph_label
+        #!initial_node_name = self.graph_label+'_'+str(MyGraph.graph_population)
+        self.head_node = GraphNode(self.graph_label+'_'+str(MyGraph.graph_population))
         self.graph_population = 1
 
     def display_graph(self):
@@ -124,7 +154,7 @@ def display_list_of_graphs(existing_graphs: list):
     for graph in existing_graphs:
         if not isinstance(graph, MyGraph):
             raise TypeError('graph must be an instance of', MyGraph)
-        graph_names.append(graph.head_node.node_label)
+        graph_names.append(graph.graph_label)
     # print list of all graph names and node count
     print('')
     for count, graphname in enumerate(graph_names, 1):
@@ -147,6 +177,7 @@ def isinputvalid(uinput: str) -> bool:
 def expand_graph(graphs: list):
     """
     prompts user to populate a chosen graph with node
+    INPUT TRAIL: A->G(to create first graph)->N->'1'
     """
     # prompt user to select a graph
     if len(graphs) == 0:
@@ -164,13 +195,28 @@ def expand_graph(graphs: list):
         # validate user choice, as an integer
         if chosen_graph_index < 0 or chosen_graph_index >= len(graphs):
             print('ERROR - YOUR CHOICE MUST BE WITHIN RANGE\n0 - ',
-                  end=str(len(graphs)-1)+'\n')
+                  end=str(len(graphs))+'\n')
         else:
             break
     while True:
-        # create mini menu for the user to chose a node
-        print('')
-        break
+        chosen_graph = graphs[chosen_graph_index]
+        if not isinstance(chosen_graph,MyGraph):
+            raise TypeError('selected graph should be an instance of',MyGraph)
+        if chosen_graph.graph_population > 1:
+            # create mini menu for the user to chose a node
+            print('NOT IMPLEMENTED YET')
+            break
+        else:
+        # if selected graph has only 1 Node in the population, automatically assume the user will expand that graph
+            print('ADDING NEW NODE TO GRAPH: ',end=chosen_graph.graph_label+'\n')
+            new_node_name = chosen_graph.head_node.node_label 
+            new_node_name += str(int(chosen_graph.graph_population))
+            #! look at TODO comment below this line,replace sectioned code
+            chosen_graph.head_node.link_child_node(GraphNode(new_node_name))
+            chosen_graph.graph_population +=1
+            #TODO ADD SCRIPT THAT AUTOMATICALLY COUNTS THE POPULATION OF THE GRAPH
+            break
+    return graphs
 
 
 def add_expand_graphs(graphs: list) -> list:  # todo finish this method
