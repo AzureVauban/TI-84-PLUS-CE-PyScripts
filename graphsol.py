@@ -68,8 +68,10 @@ class GraphNode:
 
     def __init__(self, node_label: str) -> None:
         self.node_label = node_label
+        self.connected_nodes_child = []
+        self.connected_nodes_parent = []
 
-    def link_child_node(self, child_node):
+    def link_child_node(self, child_node :GraphNode):
         """
         create a new doubly linked connection between this node as the parent
         and another node was a child
@@ -81,8 +83,10 @@ class GraphNode:
             child_node.connected_nodes_parent.append(self)
             #! update adajency graph
         else:
-            print('UNABLE CONNECT CHILD NODE',child_node.node_label,'\nTO PARENT NODE',self.node_label)
-    def link_parent_node(self,parent_node):
+            print('UNABLE CONNECT CHILD NODE', child_node.node_label,
+                  '\nTO PARENT NODE', self.node_label)
+
+    def link_parent_node(self, parent_node):
         """
         create a new doubly linked connection between this node as the parent
         and another node was a child
@@ -94,7 +98,9 @@ class GraphNode:
             parent_node.connected_nodes_parent.append(self)
             #! update adajency graph
         else:
-            print('UNABLE CONNECT PARENT NODE',parent_node.node_label,'\nTO CHILD NODE',self.node_label)
+            print('UNABLE CONNECT PARENT NODE', parent_node.node_label,
+                  '\nTO CHILD NODE', self.node_label)
+
     def __validate_connection_exists(self, node_check) -> bool:
         """
         checks to see if a connection between this node and another node exists already;
@@ -104,16 +110,17 @@ class GraphNode:
         if not isinstance(node_check, GraphNode):
             raise TypeError('Node must be an instance of', GraphNode)
         for node in self.connected_nodes_child:
-            if not isinstance(node,GraphNode):
-                raise TypeError('child node must an instance of',GraphNode)
+            if not isinstance(node, GraphNode):
+                raise TypeError('child node must an instance of', GraphNode)
         for node in self.connected_nodes_parent:
-            if not isinstance(node,GraphNode):
-                raise TypeError('parent node must an instance of',GraphNode)
-        if node in self.connected_nodes_child or node in self.connected_nodes_parent:
+            if not isinstance(node, GraphNode):
+                raise TypeError('parent node must an instance of', GraphNode)
+        isnode_presentinchild = node in self.connected_nodes_child
+        isnode_presentinparent = node in self.connected_nodes_parent
+        #!islist_empty = len(self.connected_nodes_parent) > 0 or len(self.connected_nodes_parent) == 0
+        if isnode_presentinparent or isnode_presentinchild:
             return True
         return False
-
-    
 
 
 class MyGraph:
@@ -127,7 +134,8 @@ class MyGraph:
     def __init__(self, graph_label: str) -> None:
         self.graph_label = graph_label
         #!initial_node_name = self.graph_label+'_'+str(MyGraph.graph_population)
-        self.head_node = GraphNode(self.graph_label+'_'+str(MyGraph.graph_population))
+        self.head_node = GraphNode(
+            self.graph_label+'_'+str(MyGraph.graph_population))
         self.graph_population = 1
 
     def display_graph(self):
@@ -162,6 +170,20 @@ def display_list_of_graphs(existing_graphs: list):
     print('')
 
 
+def input_pureint(user_prompt: str) -> int:
+    """
+    prompt the user to into a number, return validated number
+    as an integer converted from a string
+    """
+    while True:
+        print(user_prompt)
+        user_input = input('').strip()
+        if not isinputvalid(user_input):
+            print('ERROR - INPUT MUST ONLY CONTAIN NUMBERS')
+        else:
+            return int(user_input)
+
+
 def isinputvalid(uinput: str) -> bool:
     """
     validate user input by 
@@ -186,12 +208,8 @@ def expand_graph(graphs: list):
     display_list_of_graphs(graphs)
     while True:  # todo finish
         # user input needs to be a validated string, then converted to an int
-        chosen_graph_index = input(
-            'WHICH GRAPH DO YOU WANT TO EXPAND: ').strip()
-        if not isinputvalid(chosen_graph_index):
-            print('ERROR - INPUT MUST ONLY CONTAIN NUMBERS')
-        else:
-            chosen_graph_index = int(chosen_graph_index) - 1
+        chosen_graph_index = input_pureint(
+            'WHICH GRAPH DO YOU WANT TO EXPAND: ')-1
         # validate user choice, as an integer
         if chosen_graph_index < 0 or chosen_graph_index >= len(graphs):
             print('ERROR - YOUR CHOICE MUST BE WITHIN RANGE\n0 - ',
@@ -200,21 +218,22 @@ def expand_graph(graphs: list):
             break
     while True:
         chosen_graph = graphs[chosen_graph_index]
-        if not isinstance(chosen_graph,MyGraph):
-            raise TypeError('selected graph should be an instance of',MyGraph)
+        if not isinstance(chosen_graph, MyGraph):
+            raise TypeError('selected graph should be an instance of', MyGraph)
         if chosen_graph.graph_population > 1:
             # create mini menu for the user to chose a node
             print('NOT IMPLEMENTED YET')
             break
         else:
-        # if selected graph has only 1 Node in the population, automatically assume the user will expand that graph
-            print('ADDING NEW NODE TO GRAPH: ',end=chosen_graph.graph_label+'\n')
-            new_node_name = chosen_graph.head_node.node_label 
+            # if selected graph has only 1 Node in the population, automatically assume the user will expand that graph
+            print('ADDING NEW NODE TO GRAPH: ',
+                  end=chosen_graph.graph_label+'\n')
+            new_node_name = chosen_graph.head_node.node_label
             new_node_name += str(int(chosen_graph.graph_population))
             #! look at TODO comment below this line,replace sectioned code
             chosen_graph.head_node.link_child_node(GraphNode(new_node_name))
-            chosen_graph.graph_population +=1
-            #TODO ADD SCRIPT THAT AUTOMATICALLY COUNTS THE POPULATION OF THE GRAPH
+            chosen_graph.graph_population += 1
+            # TODO ADD SCRIPT THAT AUTOMATICALLY COUNTS THE POPULATION OF THE GRAPH
             break
     return graphs
 
@@ -260,7 +279,7 @@ def add_expand_graphs(graphs: list) -> list:  # todo finish this method
 
 
 # main script
-LISTOFUSERGRAPHS = []
+listofusergraphs = []
 print('PRESS 2ND + MODE/QUIT TO STOP\nTWICE RUNNING PROCESS\n')
 while True:
     help_prompt()
@@ -270,12 +289,12 @@ while True:
         print('ERROR, NOT VALID OPTION, VALID\nOPTIONS ARE A,D,L,H,Q\n')
     elif USER_INPUT == 'A':
         #! print('ADD NODE TO GRAPH OR START A\nNEW GRAPH\n')
-        LISTOFUSERGRAPHS = add_expand_graphs(LISTOFUSERGRAPHS)
+        listofusergraphs = add_expand_graphs(listofusergraphs)
     elif USER_INPUT == 'D':
         print('REMOVE DESIRED NODES\n* NOT IMPLEMENTED\n')
     elif USER_INPUT == 'L':
         #! print('LIST ALL NODES\n* NOT IMPLEMENTED\n')
-        display_list_of_graphs(LISTOFUSERGRAPHS)
+        display_list_of_graphs(listofusergraphs)
     elif USER_INPUT == 'H':
         continue
     elif USER_INPUT == 'Q':
