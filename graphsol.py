@@ -61,7 +61,7 @@ class GraphNode:
     graph Node, connects like a web
     """
     node_label = 'A'
-    adjacency_matrix = []
+    adjacency_matrix = []  # ? method to update this list is in wrapper class
     # stores other instances GraphNode
     connected_nodes_child = []
     connected_nodes_parent = []
@@ -71,57 +71,6 @@ class GraphNode:
         self.connected_nodes_child = []
         self.connected_nodes_parent = []
 
-    def link_child_node(self, child_node :GraphNode):
-        """
-        create a new doubly linked connection between this node as the parent
-        and another node was a child
-        """
-        if not isinstance(child_node, GraphNode):
-            raise TypeError('Node must be an instance of', GraphNode)
-        if not self.__validate_connection_exists(child_node):
-            self.connected_nodes_child.append(child_node)
-            child_node.connected_nodes_parent.append(self)
-            #! update adajency graph
-        else:
-            print('UNABLE CONNECT CHILD NODE', child_node.node_label,
-                  '\nTO PARENT NODE', self.node_label)
-
-    def link_parent_node(self, parent_node):
-        """
-        create a new doubly linked connection between this node as the parent
-        and another node was a child
-        """
-        if not isinstance(parent_node, GraphNode):
-            raise TypeError('Node must be an instance of', GraphNode)
-        if not self.__validate_connection_exists(parent_node):
-            self.connected_nodes_child.append(parent_node)
-            parent_node.connected_nodes_parent.append(self)
-            #! update adajency graph
-        else:
-            print('UNABLE CONNECT PARENT NODE', parent_node.node_label,
-                  '\nTO CHILD NODE', self.node_label)
-
-    def __validate_connection_exists(self, node_check) -> bool:
-        """
-        checks to see if a connection between this node and another node exists already;
-        returns true if connection exists and false if doesn't
-        """
-
-        if not isinstance(node_check, GraphNode):
-            raise TypeError('Node must be an instance of', GraphNode)
-        for node in self.connected_nodes_child:
-            if not isinstance(node, GraphNode):
-                raise TypeError('child node must an instance of', GraphNode)
-        for node in self.connected_nodes_parent:
-            if not isinstance(node, GraphNode):
-                raise TypeError('parent node must an instance of', GraphNode)
-        isnode_presentinchild = node in self.connected_nodes_child
-        isnode_presentinparent = node in self.connected_nodes_parent
-        #!islist_empty = len(self.connected_nodes_parent) > 0 or len(self.connected_nodes_parent) == 0
-        if isnode_presentinparent or isnode_presentinchild:
-            return True
-        return False
-
 
 class MyGraph:
     """
@@ -129,6 +78,7 @@ class MyGraph:
     """
     graph_label = 'A'
     head_node = GraphNode('A0')
+    all_nodes_in_graph = []  # used for easy access
     graph_population = 0
 
     def __init__(self, graph_label: str) -> None:
@@ -137,6 +87,41 @@ class MyGraph:
         self.head_node = GraphNode(
             self.graph_label+'_'+str(MyGraph.graph_population))
         self.graph_population = 1
+        self.all_nodes_in_graph = [self.head_node]
+
+    def inquire_adjmatrix(self) -> list:
+        """
+        create matrix for adjcent matrix
+        """
+        adj_matrix = []
+        for node_red in self.all_nodes_in_graph:
+            adj_matrix_row = []
+            for node_blue in self.all_nodes_in_graph:
+                if self.isadjacent(node_red, node_blue):
+                    adj_matrix_row.append(1)
+                else:
+                    adj_matrix_row.append(0)
+            adj_matrix.append(adj_matrix_row)
+        return adj_matrix
+
+    def link_node(self, current: GraphNode, new: GraphNode, link_as_parent: bool = False):
+        """ 
+        create a new linked connection between two Nodes
+        """
+        if link_as_parent:
+            # link new with current as a parent
+            current.connected_nodes_child(new)
+            new.connected_nodes_parent(current)
+        else:
+            current.connected_nodes_parent(new)
+            new.connected_nodes_child(current)
+
+    def isadjacent(self, current_node: GraphNode, node_check: GraphNode) -> bool:
+        """
+        checks to see if a connection between this node and another node exists already;
+        returns true if connection exists and false if doesn't
+        """
+        return node_check in current_node.connected_nodes_child or node_check in current_node.connected_nodes_parent
 
     def display_graph(self):
         """
@@ -224,17 +209,18 @@ def expand_graph(graphs: list):
             # create mini menu for the user to chose a node
             print('NOT IMPLEMENTED YET')
             break
-        else:
-            # if selected graph has only 1 Node in the population, automatically assume the user will expand that graph
-            print('ADDING NEW NODE TO GRAPH: ',
-                  end=chosen_graph.graph_label+'\n')
-            new_node_name = chosen_graph.head_node.node_label
-            new_node_name += str(int(chosen_graph.graph_population))
-            #! look at TODO comment below this line,replace sectioned code
-            chosen_graph.head_node.link_child_node(GraphNode(new_node_name))
-            chosen_graph.graph_population += 1
-            # TODO ADD SCRIPT THAT AUTOMATICALLY COUNTS THE POPULATION OF THE GRAPH
-            break
+        #! CODE BELOW IS AN IMPLICIT ELSE
+        # if selected graph has only 1 Node in the population, automatically assume the user will expand that graph
+        print('ADDING NEW NODE TO GRAPH: ',
+              end=chosen_graph.graph_label+'\n')
+        new_node_name = chosen_graph.head_node.node_label
+        new_node_name += str(int(chosen_graph.graph_population))
+        #! look at TODO comment below this line,replace sectioned code
+        chosen_graph.link_child_node(
+            chosen_graph.head_node, GraphNode(new_node_name))
+        chosen_graph.graph_population += 1
+        # TODO ADD SCRIPT THAT AUTOMATICALLY COUNTS THE POPULATION OF THE GRAPH
+        break
     return graphs
 
 
@@ -244,7 +230,6 @@ def add_expand_graphs(graphs: list) -> list:  # todo finish this method
     N - Create a new node on an existing graph
     G - Create a new graph
     Q - Return to Menu
-
     """
     while True:
         print('N - Create a new node on an existing graph\nG - Create a new graph\nH - Display options\nQ - Return to Menu\n')
