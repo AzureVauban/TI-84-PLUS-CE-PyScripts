@@ -199,7 +199,7 @@ def expand_graph(graphs: list):
         print('ERROR - NO GRAPHS HAVE BEEN CREATED ')
         return graphs
     display_list_of_graphs(graphs)
-    while True:  # todo finish
+    while True:
         # user input needs to be a validated string, then converted to an int
         chosen_graph_index = input_pureint(
             'WHICH GRAPH DO YOU WANT TO EXPAND: ')-1
@@ -216,6 +216,7 @@ def expand_graph(graphs: list):
         if chosen_graph.graph_population > 1:
             # create mini menu for the user to chose a node
             print('NOT IMPLEMENTED YET')
+            # todo finish
             break
         # if selected graph has only 1 Node in the population, automatically assume the user will expand that graph
         print('ADDING NEW NODE TO GRAPH: ',
