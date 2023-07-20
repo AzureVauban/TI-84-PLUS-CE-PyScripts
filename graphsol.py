@@ -1,15 +1,5 @@
 """
 Graph edge & verticies solver
-What is an edge?:
-what is a vertex?:
-What is a graph?:
-
-
-adajency matrix
-[   [0,0,0],
-    [0,1,0],
-    [1,1,0]
-]
 """
 
 
@@ -78,18 +68,40 @@ class MyGraph:
     """
     graph_label = 'A'
     head_node = GraphNode('A0')
-    all_nodes_in_graph = []  # used for easy access
+    all_nodes_in_graph = []  # used for easy access on adj vals
     graph_population = 0
 
     def __init__(self, graph_label: str) -> None:
         self.graph_label = graph_label
-        #!initial_node_name = self.graph_label+'_'+str(MyGraph.graph_population)
         self.head_node = GraphNode(
-            self.graph_label+'_'+str(MyGraph.graph_population))
+            self.graph_label+str(MyGraph.graph_population))
         self.graph_population = 1
+        self.all_nodes_in_graph = []
         self.all_nodes_in_graph = [self.head_node]
 
-    def inquire_adjmatrix(self) -> list:
+    def get_adjmatrix_dict(self):
+        """
+        creates outputs a graph in the format of a dictionary
+        for example: 
+        A0->A1->A2->A3->A0
+        A0->A3
+        {
+            A0:[A1,A3],
+            A1:[A2],
+            A2:[A3],
+            A3:[A0]
+        }
+        """
+        adj_dict = {}
+        for node_red in self.all_nodes_in_graph:
+            adj_matrix_row = []
+            for node_blue in self.all_nodes_in_graph:
+                if self.isadjacent(node_red, node_blue):
+                    adj_matrix_row.append(node_blue.node_label)
+            adj_dict.update({node_red.node_label: adj_matrix_row})
+        return adj_dict  # returns a dictionary
+
+    def get_adjmatrix_list(self):
         """
         create matrix for adjcent matrix
         """
@@ -102,31 +114,27 @@ class MyGraph:
                 else:
                     adj_matrix_row.append(0)
             adj_matrix.append(adj_matrix_row)
-        return adj_matrix
+        return adj_matrix  # returns a list
 
-    def link_node(self, current: GraphNode, new: GraphNode, link_as_parent: bool = False):
-        """ 
-        create a new linked connection between two Nodes
-        """
-        if link_as_parent:
-            # link new with current as a parent
-            current.connected_nodes_child(new)
-            new.connected_nodes_parent(current)
-        else:
-            current.connected_nodes_parent(new)
-            new.connected_nodes_child(current)
-
-    def isadjacent(self, current_node: GraphNode, node_check: GraphNode) -> bool:
+    def isadjacent(self, current_node: GraphNode, node_check: GraphNode):
         """
         checks to see if a connection between this node and another node exists already;
         returns true if connection exists and false if doesn't
         """
+        # returns a boolean
         return node_check in current_node.connected_nodes_child or node_check in current_node.connected_nodes_parent
 
-    def display_graph(self):
+    def link_node(self, parent: GraphNode, child: GraphNode):
+        """ 
+        create a new linked connection between two Nodes
         """
-        draw the graph on the TI-84 screen using ti_mathplt
-        """
+        # link new with current as a parent
+        parent.connected_nodes_child.append(child)
+        print('EMPLACED', parent.node_label, '->', child.node_label)
+        # if node isn't new
+        if not child in self.all_nodes_in_graph:
+            self.all_nodes_in_graph.append(child)
+            self.graph_population += 1
 
 
 def help_prompt():
@@ -209,17 +217,12 @@ def expand_graph(graphs: list):
             # create mini menu for the user to chose a node
             print('NOT IMPLEMENTED YET')
             break
-        #! CODE BELOW IS AN IMPLICIT ELSE
         # if selected graph has only 1 Node in the population, automatically assume the user will expand that graph
         print('ADDING NEW NODE TO GRAPH: ',
               end=chosen_graph.graph_label+'\n')
-        new_node_name = chosen_graph.head_node.node_label
-        new_node_name += str(int(chosen_graph.graph_population))
-        #! look at TODO comment below this line,replace sectioned code
-        chosen_graph.link_child_node(
-            chosen_graph.head_node, GraphNode(new_node_name))
-        chosen_graph.graph_population += 1
-        # TODO ADD SCRIPT THAT AUTOMATICALLY COUNTS THE POPULATION OF THE GRAPH
+        new_node = GraphNode(chosen_graph.graph_label +
+                             str(chosen_graph.graph_population))
+        chosen_graph.link_node(chosen_graph.head_node, new_node)
         break
     return graphs
 
