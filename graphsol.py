@@ -268,6 +268,7 @@ def add_expand_graphs(graphs: list) -> list:  # todo finish this method
 
 
 # main script
+# todo test & cleanup code on TI-84
 listofusergraphs = []
 print('PRESS 2ND + MODE/QUIT TO STOP\nTWICE RUNNING PROCESS\n')
 while True:
